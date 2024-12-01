@@ -8,3 +8,6 @@ __pycache__/
 *_files/
 settings.json
 *.html
+token
+*.pkl
+*.csv
