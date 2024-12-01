@@ -65,3 +65,15 @@ class PCA:
             X_reduced (array): Datos transformados.
         """
         return self.fit(X).transform(X)
+    
+    def inverse_transform(self, X_reduced):
+        """
+        Reconstruye los datos originales a partir de los componentes principales.
+        
+        Parameters:
+            X_reduced (array-like): Datos en el espacio reducido.
+        
+        Returns:
+            X_approx (array): Aproximación de los datos originales.
+        """
+        return np.dot(X_reduced, self.components_.T) + self.mean_
