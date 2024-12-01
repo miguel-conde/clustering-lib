@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+#
+# MIT License
+#
+# Copyright (c) 2024 Miguel Conde
+#
 # tests/test_algorithms.py
 
 import unittest
@@ -5,6 +11,7 @@ import numpy as np
 from clustering_lib.algorithms.kmeans import KMeansClusterer
 from clustering_lib.algorithms.hierarchical import HierarchicalClusterer
 from clustering_lib.algorithms.dbscan import DBSCANClusterer
+from clustering_lib.algorithms.auto_clustering import AutoClustering
 from clustering_lib.datasets.load_datasets import load_iris
 from clustering_lib.preprocessing.scaling import StandardScaler
 
@@ -75,6 +82,30 @@ class TestDBSCANClusterer(unittest.TestCase):
         dbscan.fit(self.X_scaled)
         with self.assertRaises(NotImplementedError):
             dbscan.predict(self.X_scaled)
+
+class TestAutoClustering(unittest.TestCase):
+
+    def setUp(self):
+        X, y = load_iris()
+        scaler = StandardScaler()
+        self.X_scaled = scaler.fit_transform(X)
+        self.y = y
+
+    def test_auto_clustering(self):
+        auto_cluster = AutoClustering(method='kmeans', max_k=5, criterion='silhouette', random_state=42)
+        labels = auto_cluster.fit_predict(self.X_scaled)
+        self.assertEqual(len(labels), len(self.X_scaled))
+        self.assertTrue(1 <= auto_cluster.optimal_k <= 5)
+
+    def test_invalid_method(self):
+        with self.assertRaises(ValueError):
+            auto_cluster = AutoClustering(method='invalid', max_k=5)
+            auto_cluster.fit_predict(self.X_scaled)
+
+    def test_invalid_criterion(self):
+        with self.assertRaises(ValueError):
+            auto_cluster = AutoClustering(method='kmeans', criterion='invalid', max_k=5)
+            auto_cluster.fit_predict(self.X_scaled)
 
 
 if __name__ == '__main__':

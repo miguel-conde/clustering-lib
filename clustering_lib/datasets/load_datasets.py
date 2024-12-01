@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+#
+# MIT License
+#
+# Copyright (c) 2024 Miguel Conde
+#
 # clustering_lib/datasets/load_datasets.py
 
 from sklearn import datasets

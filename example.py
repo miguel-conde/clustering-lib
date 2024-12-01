@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+#
+# MIT License
+#
+# Copyright (c) 2024 Miguel Conde
+#
 from clustering_lib.algorithms.kmeans import KMeansClusterer
 from clustering_lib.preprocessing.scaling import StandardScaler
 from clustering_lib.evaluation.metrics import silhouette_score

@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+#
+# MIT License
+#
+# Copyright (c) 2024 Miguel Conde
+#
 from clustering_lib.algorithms.auto_clustering import AutoClustering
 from clustering_lib.datasets.load_datasets import load_iris
 from clustering_lib.preprocessing.scaling import StandardScaler

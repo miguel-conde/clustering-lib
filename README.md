@@ -8,6 +8,7 @@ Una biblioteca de clustering en Python que implementa múltiples algoritmos y he
   - K-Means
   - Clustering Jerárquico (aglomerativo)
   - DBSCAN
+  - Clustering Automatizado (AutoClustering)
   - (Agregar más algoritmos en el futuro)
 
 - **Preprocesamiento**:
@@ -16,10 +17,17 @@ Una biblioteca de clustering en Python que implementa múltiples algoritmos y he
 
 - **Evaluación**:
   - Métricas como coeficiente de silueta, índice de Calinski-Harabasz, etc.
+  - Herramientas para determinar el número óptimo de clusters:
+    - Método del Codo (Elbow Method)
+    - Análisis del Coeficiente de Silueta
+    - Estadística Gap (Gap Statistic)
+    - Validación Cruzada Interna
+    - Integración de múltiples métricas en un solo gráfico
 
 - **Visualización**:
   - Gráficos 2D y 3D
   - Dendrogramas
+  - Visualizaciones Interactivas para explorar diferentes valores de k
 
 ## Instalación
 
@@ -44,6 +52,7 @@ pip install .
 + scipy
 + scikit-learn
 + matplotlib
++ ipywidgets (para visualizaciones interactivas)
 
 ## Uso Básico
 
@@ -51,9 +60,9 @@ Aquí hay un ejemplo de cómo utilizar la biblioteca para realizar clustering co
 
 
 ```python
-from clustering_lib.algorithms.kmeans import KMeansClusterer
+from clustering_lib.algorithms.auto_clustering import AutoClustering
 from clustering_lib.preprocessing.scaling import StandardScaler
-from clustering_lib.evaluation.metrics import silhouette_score
+from clustering_lib.evaluation.selection import plot_combined_metrics
 from clustering_lib.datasets.load_datasets import load_iris
 from clustering_lib.visualization.plots import plot_clusters_2d
 from clustering_lib.preprocessing.dimensionality_reduction import PCA
@@ -65,20 +74,29 @@ X, y = load_iris()
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-# Reducción de dimensionalidad
+# Análisis de métricas combinadas para determinar k óptimo
+plot_combined_metrics(X_scaled, max_k=10)
+
+# Clustering automatizado
+auto_cluster = AutoClustering(method='kmeans', max_k=10, criterion='silhouette', random_state=42)
+labels = auto_cluster.fit_predict(X_scaled)
+print(f"Número óptimo de clusters: {auto_cluster.optimal_k}")
+
+# Reducción de dimensionalidad para visualización
 pca = PCA(n_components=2)
 X_reduced = pca.fit_transform(X_scaled)
 
-# Clustering
-kmeans = KMeansClusterer(n_clusters=3, random_state=42)
-labels = kmeans.fit_predict(X_scaled)
-
-# Evaluación
-score = silhouette_score(X_scaled, labels)
-print(f"Coeficiente de silueta: {score:.3f}")
-
-# Visualización
+# Visualización de los clusters
 plot_clusters_2d(X_reduced, labels)
+```
+
+También puedes utilizar las visualizaciones interactivas para explorar diferentes valores de $k$:
+    
+```python
+from clustering_lib.visualization.interactive import interactive_clustering
+
+# Ejecutar en una celda de Jupyter Notebook
+interactive_clustering(X_scaled, max_k=10)
 ```
 
 ## Contribuciones
@@ -92,8 +110,8 @@ plot_clusters_2d(X_reduced, labels)
 
 ## Licencia
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
 ## Contacto
 
-Para preguntas o soporte, puedes contactarme en tu.email@example.com.
+Para preguntas o soporte, puedes contactarme en miguelco2000@gmail.com.
